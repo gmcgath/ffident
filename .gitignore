@@ -1,0 +1,6 @@
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.tmp
