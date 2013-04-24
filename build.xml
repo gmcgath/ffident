@@ -1,0 +1,70 @@
+<project name="ffident" default="dist" basedir=".">
+  <description>Project build file
+    New build file for old ffident, which didn't come with one
+    2013-04-24
+  </description>
+
+  <!-- ant (or ant dist) Build everything
+       ant debug         Build everything with debug enabled
+       ant cleanclass    Delete backup and class files
+       ant cleandist     Delete backup, class, and jar files
+       ant javadoc       Build javadocs
+    -->
+
+  <!-- set global properties for this build -->
+  <property name="bin"     location="bin"/>
+  <property name="classes"     location="classes"/>
+  <property name="lib"     location="lib"/>
+  <property name="src" location="src"/>
+  <property name="test" location="test"/>
+  <property name="classpath" location="lib/*.jar"/>
+  <property name="doc"     location="doc"/>
+  <property name="javadoc" location="${doc}/javadoc"/>
+  <property name="root" location="."/>
+
+  <patternset id="properties">
+     <include name="**/*.properties"/>
+  </patternset>
+
+  <target name="dist" description="Create distribution" depends="ffident">
+  </target>	
+  	
+  <!-- Target for ffident -->
+  <target name="ffident" depends="compile">
+  	<jar destfile="${bin}/ffident.jar"  basedir="${classes}">
+        <manifest>
+            <attribute name="Built-By" value="Gary McGath"/>
+            <attribute name="Main-Class" value="metadata.identification.idtree"/>
+            <section name="common">
+               <attribute name="Implementation-Title" value="FFIdent"/>
+            </section>    
+        </manifest>	   
+   	</jar>
+  </target>
+
+  <target name="compile">
+    <javac srcdir="${src}"  destdir="${classes}" debug="off" classpath="${classpath}"/>  	
+    <copy todir="${classes}">
+     <fileset dir="${src}" casesensitive="yes" defaultexcludes="yes">
+         <include name="**/*.properties"/>
+     </fileset>    
+    </copy>
+  </target>
+
+  <target name="cleanclass">
+    <delete>
+      <fileset dir="." includes="**/*.class*"/>
+    </delete>
+  </target>
+
+  <target name="cleandist" depends="cleanclass">
+    <delete file="${bin}/ffident.jar"/>
+  </target>
+
+  <target name="javadoc">
+    <javadoc sourcepath="${src}" destdir="${javadoc}"
+             windowtitle="FFident Documentation">
+      <package name="metadata.identification"/>
+    </javadoc>
+  </target>
+</project>

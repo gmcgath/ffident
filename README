@@ -1,0 +1,121 @@
+Original version of ffident Copyright © 2003, 2004, 2005 Marco Schmidt and
+licensed under LGPL.
+
+The original version had disappeared from the Web except for an Internet
+Archive copy. The base version of this project is a simple copy of that
+project. The Internet Archive page is at
+
+http://web.archive.org/web/20061106114156/http://schmidt.devlib.org/ffident/index.html
+
+From that repository:
+
+====================================================
+ffident — Java metadata extraction / file format identification library
+
+This is the first version of a Java library to extract information from 
+files and identify their formats. Most operating systems encode the 
+format of a file in the file name extension. However, there are 
+problems with this approach:
+
+    The file extension may have been lost or abbreviated due to file 
+    system or server restrictions on naming.
+    
+    Sometimes, the file extension is wrong because the creator himself 
+    didn't know what format the file is stored in.
+    
+    The mapping from file extension to file format is not always 
+    obvious and straight-forward. As an example, compressed Windows 
+    BMP image files typically have a file extension of .rle instead of 
+    .bmp. Few people know this. On the other hand, some file name 
+    extensions are used by more than one format (e.g. .bmp or .img).
+    
+    A developer may be interested in information closely tied to a file's 
+    format instead of the format itself. As an example, someone may want 
+    to test if a file contains video (for a catalog program) or determine 
+    the appropriate MIME type (in a server environment, e.g. a servlet). 
+    This kind of information cannot be derived directly from the file 
+    extension.
+
+When running on an operating system that knows about file types regardless of 
+file extensions (like Mac OS), querying that type of information may be an option. 
+However, that approach is too platform dependent. The only way to be sure about 
+what a file contains is to look at its content. Unfortunately, this requires 
+knowledge of the internal structure of all file formats.
+
+A working solution is to collect information on the most interesting and most 
+common file formats. This has been done in the Unix command line utility 
+file(1) for a long time. It checks each file to be examined against a list of 
+known signatures (the magic(5) file).
+
+This first version of a yet to be named file format identification library 
+uses the same approach. In the future the library will also be able extract 
+format-group-specific metadata from files, just like ImageInfo does it 
+for images. 
+
+USAGE
+
+Demo program idtree
+
+The library comes with a command line utility named metadata.idtree. It 
+checks files and directories and prints the format name or unknown data 
+to standard output. Run it like this:
+
+java metadata.idtree d:\test.jpg c:\files\
+
+This will check the file d:\test.jpg and the complete directory tree under 
+c:\files\. 
+
+From inside a program
+
+If you need information from within a Java program, use the library like this:
+
+File file = new File("filename");
+FormatDescription desc = FormatIdentification.identify(file);
+if (desc == null) {
+  System.out.println("Unknown format.");
+} else {
+  System.out.prinlnt("Format=" + desc.getShortName() + ", MIME type=" + desc.getMimeType());
+}
+
+Check out FormatDescription for the kind of information which can be queried 
+after successful file examining (result of identify is not null). 
+
+Links on Java, metadata extraction and file format identification
+
+    javax.activation.FileDataSource — JavaBeans Activation Framework class 
+    to identify the MIME type of a given file.
+	    http://web.archive.org/web/20061106114156/http://java.sun.com/products/javabeans/glasgow/javadocs/javax/activation/FileDataSource.html
+    JHOVE - Format-Specific Digital Object Validation — file format 
+    identification and validation in Java. Plugin system, modules for 
+    various popular formats (GIF, JPEG, PDF, XML etc.) included. [GPL]
+    	https://sourceforge.net/projects/jhove/
+    File format section of this site — provides information and links.
+    	http://web.archive.org/web/20061106114156/http://schmidt.devlib.org/file-formats/index.html
+    ImageInfo — image metadata extraction.
+    	http://web.archive.org/web/20061106114156/http://schmidt.devlib.org/image-info/index.html
+    javax.swing.filechooser.FileSystemView — runtime library class 
+    (since Java 1.4) which can provide system file icons and other file 
+    system metadata.
+    	http://web.archive.org/web/20061106114156/http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/filechooser/FileSystemView.html
+    javax.swing.plaf.basic.BasicFileChooserUI.BasicFileView — more 
+    filesystem metadata (type, description).
+    	http://web.archive.org/web/20061106114156/http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/plaf/basic/BasicFileChooserUI.BasicFileView.html
+
+License
+
+This library is distributed under the LGPL.
+
+Requirements
+
+This library requires Java 1.4 or higher.
+
+ChangeLog
+
+    2005-10-21 — It seems the old archive (without the bug fix) made it back after I moved my site. Now the changed version is back up.
+
+    2004-05-12 — Bug fix: FormatDescription#addMimeTypes: changed if (mimeTypes == null) to if (mimeType == null). Thanks to everyone reporting that.
+
+====================================================
+
+The Lesser Gnu Public License (LGPL) is found at
+http://web.archive.org/web/20061106114156/http://www.gnu.org/copyleft/lesser.html
